@@ -1,7 +1,8 @@
 // ignore: unused_import
-import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 void main() => runApp(const MyApp());
 
@@ -27,25 +28,10 @@ class SnakeAndLadderPage extends StatefulWidget {
   State<SnakeAndLadderPage> createState() => _SnakeAndLadderPageState();
 }
 
-class _SnakeAndLadderPageState extends State<SnakeAndLadderPage> {
+class _SnakeAndLadderPageState extends State<SnakeAndLadderPage>
+    with TickerProviderStateMixin {
   late List<List<int>> ladders;
   late List<List<int>> snakes;
-
-  @override
-  void initState() {
-    final random = math.Random();
-    snakes = List.generate(10, (index) {
-      int startHome = random.nextInt(100);
-      int endHome = random.nextInt(100);
-      return [startHome, endHome];
-    });
-    ladders = List.generate(10, (index) {
-      int startHome = random.nextInt(100);
-      int endHome = random.nextInt(100);
-      return [startHome, endHome];
-    });
-    super.initState();
-  }
 
   final List<GlobalKey> _keys = List.generate(100, (index) => GlobalKey());
 
@@ -54,6 +40,14 @@ class _SnakeAndLadderPageState extends State<SnakeAndLadderPage> {
         key.currentContext!.findRenderObject() as RenderBox;
     final position = renderBox.localToGlobal(Offset.zero);
     return [position.dx, position.dy];
+  }
+
+  late AnimationController _animationController;
+  var rnd = Random();
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(vsync: this);
   }
 
   @override
@@ -79,6 +73,38 @@ class _SnakeAndLadderPageState extends State<SnakeAndLadderPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 drawBoard(),
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      child: GestureDetector(
+                        onTap: () {
+                          // _animationController.forward(
+                          //   from: 0,
+                          //   // from: AnimationController(vsync: this).value,
+                          // );
+                          _animationController.animateTo(rnd.nextDouble());
+                          // Future.delayed(
+                          //   Duration(milliseconds: rnd.nextInt(1000)),
+                          //   () => _animationController.stop(),
+                          // );
+                        },
+                        child: Center(
+                          child: Lottie.asset(
+                            'assets/gifs/dice_rolling.json',
+                            // repeat: false,
+                            controller: _animationController,
+                            onLoaded: (composition) {
+                              _animationController
+                                ..duration = composition.duration
+                                ..forward();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
             FutureBuilder(
@@ -278,11 +304,11 @@ class ArrowPainter extends CustomPainter {
     path.lineTo(endX, endY);
 
     // Draw arrowhead
-    double angle = math.atan2(endY - startY, endX - startX);
-    double arrowX1 = endX - arrowSize * math.cos(angle - math.pi / 6);
-    double arrowY1 = endY - arrowSize * math.sin(angle - math.pi / 6);
-    double arrowX2 = endX - arrowSize * math.cos(angle + math.pi / 6);
-    double arrowY2 = endY - arrowSize * math.sin(angle + math.pi / 6);
+    double angle = atan2(endY - startY, endX - startX);
+    double arrowX1 = endX - arrowSize * cos(angle - pi / 6);
+    double arrowY1 = endY - arrowSize * sin(angle - pi / 6);
+    double arrowX2 = endX - arrowSize * cos(angle + pi / 6);
+    double arrowY2 = endY - arrowSize * sin(angle + pi / 6);
     path.moveTo(endX, endY);
     path.lineTo(arrowX1, arrowY1);
     path.moveTo(endX, endY);
