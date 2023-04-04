@@ -1,9 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+// ignore: unused_import
 import 'package:lottie/lottie.dart';
 
+// ignore: unused_element
 late int _numOfPlayers;
+// ignore: unused_element
+late final List<String> _playersName;
+int diceAnimationDuration = 0;
+int currentDiceNum = 6;
+
 final List<GlobalKey> _keys = List.generate(100, (index) => GlobalKey());
 List<double> _getOffsetOfHome(GlobalKey key) {
   final RenderBox renderBox =
@@ -41,6 +48,7 @@ class _SnakeAndLadderPageState extends State<SnakeAndLadderPage>
   late List<List<int>> ladders;
   late List<List<int>> snakes;
 
+  // ignore: unused_field
   late AnimationController _animationController;
   var rnd = Random();
   @override
@@ -70,7 +78,8 @@ class _SnakeAndLadderPageState extends State<SnakeAndLadderPage>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 drawBoard(),
-                diceAndWhoTurnText(),
+                const SizedBox(height: 50),
+                diceAndWhoTurnBox(),
               ],
             ),
             drawSnakesAndLadders(),
@@ -80,45 +89,110 @@ class _SnakeAndLadderPageState extends State<SnakeAndLadderPage>
     );
   }
 
-  Row diceAndWhoTurnText() {
+  Row diceAndWhoTurnBox() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        SizedBox(
-          height: 200,
-          child: GestureDetector(
-            onTap: () {
-              _animationController.forward(
-                from: 0,
-                // from: AnimationController(vsync: this).value,
+        // SizedBox(
+        //   height: 200,
+        //   child: GestureDetector(
+        //     onTap: () {
+        //       _animationController.forward(
+        //         from: 0,
+        //       );
+        //       _animationController.animateTo(rnd.nextDouble());
+        //     },
+        //     child: Center(
+        //       child: Lottie.asset(
+        //         'assets/gifs/dice_rolling.json',
+        //         // repeat: false,
+        //         controller: _animationController,
+        //         onLoaded: (composition) {
+        //           _animationController.duration = composition.duration;
+        //         },
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        FutureBuilder(
+          future: Future.delayed(Duration(milliseconds: diceAnimationDuration)),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Visibility(
+                visible: true,
+                child: Center(
+                  child: Lottie.network(
+                    "https://assets9.lottiefiles.com/packages/lf20_Wy80jjKz4n.json",
+                    height: 75,
+                  ),
+                ),
               );
-              _animationController.animateTo(rnd.nextDouble());
-              // Future.delayed(
-              //   Duration(milliseconds: rnd.nextInt(1000)),
-              //   () => _animationController.stop(),
-              // );
-            },
-            child: Center(
-              child: Lottie.asset(
-                'assets/gifs/dice_rolling.json',
-                // repeat: false,
-                controller: _animationController,
-                onLoaded: (composition) {
-                  _animationController.duration = composition.duration;
-                },
-              ),
-            ),
-          ),
+            } else {
+              diceAnimationDuration = 2000;
+              currentDiceNum = Random().nextInt(6) + 1;
+              return Visibility(
+                visible: true,
+                child: dice(currentDiceNum),
+              );
+            }
+          },
         ),
         // ignore: prefer_const_constructors
-        Text(
-          "نوبت : بازیکن 1",
-          style: const TextStyle(
-            color: Colors.amber,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: () {
+            // start dice rolling
+            setState(() {});
+          },
+          child: Column(
+            children: [
+              const Text(
+                "نوبت : بازیکن 1",
+                style: TextStyle(
+                  color: Colors.amber,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        border: Border.all(color: Colors.white, width: 5),
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                        color: Colors.yellow,
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ],
+              ),
+            ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -212,7 +286,11 @@ class _SnakeAndLadderPageState extends State<SnakeAndLadderPage>
                   ),
                 ),
                 CustomPaint(
-                  painter: ShapesPainter(),
+                  painter: ShapesPainter(
+                    x: _getOffsetOfHome(_keys[1])[0] + 22,
+                    y: _getOffsetOfHome(_keys[1])[1] + 22,
+                    color: Colors.deepOrange,
+                  ),
                 ),
               ],
             ),
@@ -278,9 +356,152 @@ class _SnakeAndLadderPageState extends State<SnakeAndLadderPage>
       default:
     }
   }
+
+  dice(int diceNum) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      height: 75,
+      width: 75,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 65,
+            width: 65,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(22),
+            ),
+            child: dicePerNum(diceNum),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget dicePerNum(int no) {
+    switch (no) {
+      case 1:
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 22.5,
+              width: 22.5,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(50),
+              ),
+            ),
+          ],
+        );
+      case 2:
+        return Padding(
+          padding: const EdgeInsets.all(7),
+          child: Stack(
+            children: const [
+              DiceDot(alignment: Alignment.topRight),
+              DiceDot(alignment: Alignment.bottomLeft),
+            ],
+          ),
+        );
+      case 3:
+        return Padding(
+          padding: const EdgeInsets.all(7),
+          child: Stack(
+            children: const [
+              DiceDot(alignment: Alignment.topRight),
+              DiceDot(alignment: Alignment.center),
+              DiceDot(alignment: Alignment.bottomLeft),
+            ],
+          ),
+        );
+      case 4:
+        return Padding(
+          padding: const EdgeInsets.all(7),
+          child: Stack(
+            children: const [
+              DiceDot(alignment: Alignment.topLeft),
+              DiceDot(alignment: Alignment.topRight),
+              DiceDot(alignment: Alignment.bottomLeft),
+              DiceDot(alignment: Alignment.bottomRight),
+            ],
+          ),
+        );
+      case 5:
+        return Padding(
+          padding: const EdgeInsets.all(7),
+          child: Stack(
+            children: const [
+              DiceDot(alignment: Alignment.topLeft),
+              DiceDot(alignment: Alignment.topRight),
+              DiceDot(alignment: Alignment.center),
+              DiceDot(alignment: Alignment.bottomLeft),
+              DiceDot(alignment: Alignment.bottomRight),
+            ],
+          ),
+        );
+      case 6:
+        return Padding(
+          padding: const EdgeInsets.all(7),
+          child: Stack(
+            children: const [
+              DiceDot(alignment: Alignment.topLeft),
+              DiceDot(alignment: Alignment.topCenter),
+              DiceDot(alignment: Alignment.topRight),
+              DiceDot(alignment: Alignment.bottomLeft),
+              DiceDot(alignment: Alignment.bottomCenter),
+              DiceDot(alignment: Alignment.bottomRight),
+            ],
+          ),
+        );
+      default:
+        return Column();
+    }
+  }
+}
+
+class DiceDot extends StatelessWidget {
+  final Alignment alignment;
+
+  const DiceDot({super.key, required this.alignment});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+        height: 15,
+        width: 15,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black,
+              Colors.black54,
+            ],
+          ),
+          borderRadius: BorderRadius.circular(50),
+        ),
+      ),
+    );
+  }
 }
 
 class ShapesPainter extends CustomPainter {
+  final double x, y;
+  final Color color;
+
+  ShapesPainter({
+    required this.x,
+    required this.y,
+    required this.color,
+  });
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
@@ -306,13 +527,12 @@ class ShapesPainter extends CustomPainter {
     // canvas.drawPath(path, paint);
 
     // set the color property of the paint
-    paint.color = Colors.deepOrange;
+    paint.color = color;
 
     // center of the canvas is (x,y) => (width/2, height/2)
-    var center = Offset(
-        _getOffsetOfHome(_keys[0])[0] + 22, _getOffsetOfHome(_keys[0])[1] + 22);
+    final Offset center = Offset(x, y);
 
-    // draw the circle with center having radius 75.0
+    // draw the circle with center having radius 15
     canvas.drawCircle(center, 15, paint);
   }
 
@@ -375,40 +595,3 @@ class ArrowPainter extends CustomPainter {
     return false;
   }
 }
-
-// class BeadPainter extends CustomPainter {
-//   final Color color;
-//   final double filledCircleRadius;
-//   double x;
-//   double y;
-
-//   BeadPainter({
-//     required this.x,
-//     required this.y,
-//     required this.filledCircleRadius,
-//     this.color = Colors.black,
-//   }) {
-//     x += 22;
-//     y += 22;
-//   }
-
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final double centerX = size.width / 2;
-//     final double centerY = size.height / 2;
-//     final Paint paint = Paint()..color = Colors.black;
-//     const double filledCircleRadius = 3;
-//     const double radiantStep = 2 * pi;
-//     canvas.drawCircle(
-//       Offset(centerX + sin(1 * radiantStep) * radius,
-//           centerY + cos(1 * radiantStep) * radius),
-//       filledCircleRadius,
-//       paint,
-//     );
-//   }
-
-//   @override
-//   bool shouldRepaint(ArrowPainter oldDelegate) {
-//     return false;
-//   }
-// }
