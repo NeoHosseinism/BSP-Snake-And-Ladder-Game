@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-late int numOfPlayers;
-late final List<String> playersName;
+import 'model/player/player.dart';
+
 int diceAnimationDuration = 0;
 int currentDiceNum = 6;
+List<RxBool> checkBoxs = List.generate(4, (index) => false.obs);
+List<Player> players = [];
+
+const List<Color> playerTokenColors = [
+  Colors.red,
+  Colors.blue,
+  Colors.green,
+  Colors.lime,
+];
 
 final List<GlobalKey> keys = List.generate(100, (index) => GlobalKey());
 List<double> getOffsetOfHome(GlobalKey key) {
