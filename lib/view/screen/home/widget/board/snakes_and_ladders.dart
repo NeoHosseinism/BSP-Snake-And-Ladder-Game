@@ -7,10 +7,19 @@ import '../../../../painter/player_token.dart';
 class SnakesAndLadders extends StatelessWidget {
   const SnakesAndLadders({super.key});
 
+  void setAHomeSize() {
+    final size = keys[0].currentContext!.size;
+    if (size != null) {
+      halfOfAHomeWidth = size.width / 2;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.delayed(const Duration(milliseconds: 1)),
+      future: Future.delayed(const Duration(seconds: 1), () {
+        setAHomeSize();
+      }),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Visibility(
@@ -37,7 +46,7 @@ class SnakesAndLadders extends StatelessWidget {
                     startY: getOffsetOfHome(keys[98])[1],
                     endX: getOffsetOfHome(keys[3])[0],
                     endY: getOffsetOfHome(keys[3])[1],
-                    arrowSize: 22 / 1.75,
+                    arrowSize: halfOfAHomeWidth / 1.75,
                     color: Colors.red,
                   ),
                 ),
@@ -48,7 +57,7 @@ class SnakesAndLadders extends StatelessWidget {
                     startY: getOffsetOfHome(keys[66])[1],
                     endX: getOffsetOfHome(keys[5])[0],
                     endY: getOffsetOfHome(keys[5])[1],
-                    arrowSize: 22 / 1.75,
+                    arrowSize: halfOfAHomeWidth / 1.75,
                     color: Colors.red,
                   ),
                 ),
@@ -59,7 +68,7 @@ class SnakesAndLadders extends StatelessWidget {
                     startY: getOffsetOfHome(keys[82])[1],
                     endX: getOffsetOfHome(keys[30])[0],
                     endY: getOffsetOfHome(keys[30])[1],
-                    arrowSize: 22 / 1.75,
+                    arrowSize: halfOfAHomeWidth / 1.75,
                     color: Colors.red,
                   ),
                 ),
@@ -70,7 +79,7 @@ class SnakesAndLadders extends StatelessWidget {
                     startY: getOffsetOfHome(keys[22])[1],
                     endX: getOffsetOfHome(keys[51])[0],
                     endY: getOffsetOfHome(keys[51])[1],
-                    arrowSize: 22 / 1.75,
+                    arrowSize: halfOfAHomeWidth / 1.75,
                     color: Colors.green,
                   ),
                 ),
@@ -81,7 +90,7 @@ class SnakesAndLadders extends StatelessWidget {
                     startY: getOffsetOfHome(keys[43])[1],
                     endX: getOffsetOfHome(keys[96])[0],
                     endY: getOffsetOfHome(keys[96])[1],
-                    arrowSize: 22 / 1.75,
+                    arrowSize: halfOfAHomeWidth / 1.75,
                     color: Colors.green,
                   ),
                 ),
@@ -92,14 +101,14 @@ class SnakesAndLadders extends StatelessWidget {
                     startY: getOffsetOfHome(keys[8])[1],
                     endX: getOffsetOfHome(keys[57])[0],
                     endY: getOffsetOfHome(keys[57])[1],
-                    arrowSize: 22 / 1.75,
+                    arrowSize: halfOfAHomeWidth / 1.75,
                     color: Colors.green,
                   ),
                 ),
                 CustomPaint(
                   painter: PlayerTokenPainter(
-                    x: getOffsetOfHome(keys[1])[0] + 22,
-                    y: getOffsetOfHome(keys[1])[1] + 22,
+                    x: getOffsetOfHome(keys[1])[0] + halfOfAHomeWidth,
+                    y: getOffsetOfHome(keys[1])[1] + halfOfAHomeWidth,
                     color: Colors.deepOrange,
                   ),
                 ),

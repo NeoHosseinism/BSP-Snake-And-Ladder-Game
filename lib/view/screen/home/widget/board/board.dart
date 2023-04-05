@@ -11,6 +11,7 @@ class Board extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
           shrinkWrap: true,
           reverse: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

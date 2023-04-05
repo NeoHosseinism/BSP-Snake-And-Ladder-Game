@@ -24,29 +24,6 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        // FutureBuilder(
-        //   future: Future.delayed(Duration(milliseconds: diceAnimationDuration)),
-        //   builder: (BuildContext context, AsyncSnapshot snapshot) {
-        //     if (snapshot.connectionState == ConnectionState.waiting) {
-        //       return Visibility(
-        //         visible: true,
-        //         child: Center(
-        //           child: Lottie.asset(
-        //             "assets/gifs/131706-dice-6.json",
-        //             height: 75,
-        //           ),
-        //         ),
-        //       );
-        //     } else {
-        //       diceAnimationDuration = 2000;
-        //       currentDiceNum = Random().nextInt(6) + 1;
-        //       return Visibility(
-        //         visible: true,
-        //         child: Dice(currentDiceNum),
-        //       );
-        //     }
-        //   },
-        // ),
         if (diceRolling)
           Center(
             child: Lottie.asset(
@@ -55,7 +32,6 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
             ),
           ),
         if (!diceRolling) Dice(homeCtrl.currentDiceNum.value),
-
         GestureDetector(
           onTap: () {
             setState(() {

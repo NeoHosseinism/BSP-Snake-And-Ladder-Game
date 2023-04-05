@@ -6,6 +6,7 @@ import 'model/player/player.dart';
 List<RxBool> checkBoxs = List.generate(4, (index) => false.obs);
 List<Player> players = [];
 int whoIsTurn = 0;
+late double halfOfAHomeWidth;
 
 const List<Color> playerTokenColors = [
   Colors.red,

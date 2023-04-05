@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../global.dart';
+
 class ArrowPainter extends CustomPainter {
   final Color color;
   final double strokeWidth;
@@ -20,10 +22,10 @@ class ArrowPainter extends CustomPainter {
     this.color = Colors.black,
     this.strokeWidth = 2.5,
   }) {
-    startX += 22;
-    startY += 22;
-    endX += 22;
-    endY += 22;
+    startX += halfOfAHomeWidth;
+    startY += halfOfAHomeWidth;
+    endX += halfOfAHomeWidth;
+    endY += halfOfAHomeWidth;
   }
 
   @override
