@@ -3,10 +3,9 @@ import 'package:get/get.dart';
 
 import 'model/player/player.dart';
 
-int diceAnimationDuration = 0;
-int currentDiceNum = 6;
 List<RxBool> checkBoxs = List.generate(4, (index) => false.obs);
 List<Player> players = [];
+int whoIsTurn = 0;
 
 const List<Color> playerTokenColors = [
   Colors.red,

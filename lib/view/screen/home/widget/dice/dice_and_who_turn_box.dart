@@ -1,52 +1,78 @@
-import 'dart:math';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:snake_and_ladder/controller/home/home.dart';
 
 import '../../../../../global.dart';
 import 'dice.dart';
 
-class DiceAndWhoTurnBox extends StatelessWidget {
+final HomeCtrl homeCtrl = Get.put(HomeCtrl());
+bool diceRolling = false;
+
+class DiceAndWhoTurnBox extends StatefulWidget {
   const DiceAndWhoTurnBox({super.key});
 
+  @override
+  State<DiceAndWhoTurnBox> createState() => _DiceAndWhoTurnBoxState();
+}
+
+class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        FutureBuilder(
-          future: Future.delayed(Duration(milliseconds: diceAnimationDuration)),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Visibility(
-                visible: true,
-                child: Center(
-                  child: Lottie.asset(
-                    "assets/gifs/131706-dice-6.json",
-                    height: 75,
-                  ),
-                ),
-              );
-            } else {
-              diceAnimationDuration = 2000;
-              currentDiceNum = Random().nextInt(6) + 1;
-              return Visibility(
-                visible: true,
-                child: Dice(currentDiceNum),
-              );
-            }
-          },
-        ),
+        // FutureBuilder(
+        //   future: Future.delayed(Duration(milliseconds: diceAnimationDuration)),
+        //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       return Visibility(
+        //         visible: true,
+        //         child: Center(
+        //           child: Lottie.asset(
+        //             "assets/gifs/131706-dice-6.json",
+        //             height: 75,
+        //           ),
+        //         ),
+        //       );
+        //     } else {
+        //       diceAnimationDuration = 2000;
+        //       currentDiceNum = Random().nextInt(6) + 1;
+        //       return Visibility(
+        //         visible: true,
+        //         child: Dice(currentDiceNum),
+        //       );
+        //     }
+        //   },
+        // ),
+        if (diceRolling)
+          Center(
+            child: Lottie.asset(
+              "assets/gifs/131706-dice-6.json",
+              height: 75,
+            ),
+          ),
+        if (!diceRolling) Dice(homeCtrl.currentDiceNum.value),
+
         GestureDetector(
           onTap: () {
-            // start dice rolling
-            // setState(() {});
+            setState(() {
+              diceRolling = true;
+            });
+            Timer(const Duration(seconds: 2), () {
+              setState(() {
+                diceRolling = false;
+              });
+            });
+            homeCtrl.diceRoll();
           },
           child: Column(
             children: [
-              const Text(
-                "نوبت : بازیکن 1",
-                style: TextStyle(
+              Text(
+                "نوبت : ${players[whoIsTurn].name}",
+                style: const TextStyle(
                   color: Colors.amber,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -54,40 +80,25 @@ class DiceAndWhoTurnBox extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Row(
-                children: [
-                  Container(
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        border: Border.all(color: Colors.white, width: 5),
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                        color: Colors.yellow,
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                ],
+                children: List.generate(
+                  players.length,
+                  (index) {
+                    return Container(
+                      height: 25,
+                      width: 25,
+                      margin: index != players.length - 1
+                          ? const EdgeInsets.only(right: 8)
+                          : null,
+                      decoration: BoxDecoration(
+                        color: players[index].color,
+                        border: index == whoIsTurn
+                            ? Border.all(color: Colors.white, width: 5)
+                            : null,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),
