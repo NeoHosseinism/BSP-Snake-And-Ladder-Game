@@ -41,18 +41,20 @@ class _SplashState extends State<Splash> {
                 textAlign: TextAlign.center,
               ),
             ),
+            const Align(
+              alignment: Alignment(0, 0.5),
+              child: Text(
+                "استاد راهنما : جناب آقای دکتر امیری",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 25),
-                child: FittedBox(
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: Lottie.asset(
-                      'assets/gifs/dice_rolling.json',
-                    ),
-                  ),
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: Lottie.asset(
+                  'assets/gifs/lf20_tsxbtrcu.json',
                 ),
               ),
             ),
