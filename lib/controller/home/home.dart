@@ -9,25 +9,42 @@ class HomeCtrl extends GetxController {
   Future<void> showDiceNumAndMovePlayerToken() async {
     // TODO: check not over flow of 100
     // TODO: 10 => 11
-    // TODO: should be make 6 to come in
     // TODO: a player can die another player
 
     currentDiceNum.value = Random().nextInt(6) + 1;
+    // late int destination;
+    // if (players[whoIsTurn.value].homeNo != -1) {
+    //   destination = currentDiceNum.value + players[whoIsTurn.value].homeNo;
+    // } else {
+    //   destination = currentDiceNum.value;
+    // }
 
     for (int i = 0; i < currentDiceNum.value; i++) {
       await Future.delayed(const Duration(milliseconds: 300), () {
-        players[whoIsTurn].homeNo++;
-        players[whoIsTurn].x.value =
-            getOffsetOfHome(keys[players[whoIsTurn].homeNo])[0];
-        players[whoIsTurn].y.value =
-            getOffsetOfHome(keys[players[whoIsTurn].homeNo])[1];
+        players[whoIsTurn.value].homeNo++;
+        players[whoIsTurn.value].x.value =
+            getOffsetOfHome(keys[players[whoIsTurn.value].homeNo])[0];
+        players[whoIsTurn.value].y.value =
+            getOffsetOfHome(keys[players[whoIsTurn.value].homeNo])[1];
       });
     }
 
-    if (whoIsTurn + 1 < players.length) {
-      whoIsTurn++;
+    int overLapperIndex = players.indexWhere((element) {
+      return element.name != players[whoIsTurn.value].name &&
+          // element.homeNo == destination;
+          element.homeNo == players[whoIsTurn.value].homeNo;
+    });
+    if (overLapperIndex != -1) {
+      players[overLapperIndex]
+        ..homeNo = -1
+        ..x.value = -1.0
+        ..y.value = -1.0;
+    }
+
+    if (whoIsTurn.value + 1 < players.length) {
+      whoIsTurn.value++;
     } else {
-      whoIsTurn = 0;
+      whoIsTurn.value = 0;
     }
   }
 }

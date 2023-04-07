@@ -24,52 +24,63 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        if (diceRolling)
-          Center(
-            child: Lottie.asset(
-              "assets/gifs/131706-dice-6.json",
-              height: 75,
-            ),
-          ),
-        if (!diceRolling) Dice(homeCtrl.currentDiceNum.value),
+        SizedBox(
+          height: 100,
+          width: 100,
+          child: (diceRolling)
+              ? Center(
+                  child: Lottie.asset(
+                    "assets/gifs/131706-dice-6.json",
+                    height: 100,
+                  ),
+                )
+              : Padding(
+                padding: const EdgeInsets.all(12),
+                child: Dice(
+                    homeCtrl.currentDiceNum.value,
+                  ),
+              ),
+        ),
         GestureDetector(
           onTap: () async {
             await showDiceRollingAnimation();
             await homeCtrl.showDiceNumAndMovePlayerToken();
           },
-          child: Column(
-            children: [
-              Text(
-                "نوبت : ${players[whoIsTurn].name}",
-                style: const TextStyle(
-                  color: Colors.amber,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+          child: Obx(
+            () => Column(
+              children: [
+                Text(
+                  "نوبت : ${players[whoIsTurn.value].name}",
+                  style: const TextStyle(
+                    color: Colors.amber,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: List.generate(
-                  players.length,
-                  (index) {
-                    return Container(
-                      height: 25,
-                      width: 25,
-                      margin: index != players.length - 1
-                          ? const EdgeInsets.only(right: 8)
-                          : null,
-                      decoration: BoxDecoration(
-                        color: players[index].color,
-                        border: index == whoIsTurn
-                            ? Border.all(color: Colors.white, width: 5)
+                const SizedBox(height: 20),
+                Row(
+                  children: List.generate(
+                    players.length,
+                    (index) {
+                      return Container(
+                        height: 25,
+                        width: 25,
+                        margin: index != players.length - 1
+                            ? const EdgeInsets.only(right: 8)
                             : null,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    );
-                  },
+                        decoration: BoxDecoration(
+                          color: players[index].color,
+                          border: index == whoIsTurn.value
+                              ? Border.all(color: Colors.white, width: 5)
+                              : null,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -80,7 +91,7 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
     setState(() {
       diceRolling = true;
     });
-    await Future.delayed(const Duration(seconds: 2), () {
+    await Future.delayed(const Duration(milliseconds: 1700), () {
       setState(() {
         diceRolling = false;
       });

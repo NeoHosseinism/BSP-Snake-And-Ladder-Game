@@ -48,18 +48,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     if (players[index].x.value + players[index].y.value ==
                         -2.0) {
                       return Container();
+                    } else {
+                      return Positioned(
+                        left: players[index].x.value + halfOfAHomeWidth / 2,
+                        top: players[index].y.value + halfOfAHomeWidth / 2,
+                        child: Container(
+                          height: halfOfAHomeWidth.value,
+                          width: halfOfAHomeWidth.value,
+                          decoration: BoxDecoration(
+                              color: players[index].color,
+                              borderRadius: BorderRadius.circular(15)),
+                        ),
+                      );
                     }
-                    return Positioned(
-                      left: players[index].x.value + halfOfAHomeWidth / 2,
-                      top: players[index].y.value + halfOfAHomeWidth / 2,
-                      child: Container(
-                        height: halfOfAHomeWidth.value,
-                        width: halfOfAHomeWidth.value,
-                        decoration: BoxDecoration(
-                            color: players[index].color,
-                            borderRadius: BorderRadius.circular(15)),
-                      ),
-                    );
                   },
                 ),
               ),
