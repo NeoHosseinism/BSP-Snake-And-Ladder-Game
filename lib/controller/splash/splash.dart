@@ -5,7 +5,7 @@ import 'package:snake_and_ladder/model/player/player.dart';
 
 class SplashCtrl extends GetxController {
   List<TextEditingController> txtCtrls = List.generate(
-      4, (index) => TextEditingController(text: index.toString()));
+      4, (index) => TextEditingController(text: "حسین"));
       // ! checkboxs and text editing controllers
 
   RxBool showSplash = true.obs;

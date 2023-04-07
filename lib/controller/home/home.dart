@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../global.dart';
@@ -8,8 +8,6 @@ import '../../global.dart';
 class HomeCtrl extends GetxController {
   RxInt currentDiceNum = 6.obs;
   Future<void> showDiceNumAndMovePlayerToken() async {
-    // TODO: 10 => 11
-
     currentDiceNum.value = Random().nextInt(6) + 1;
 
     for (int i = 0; i < currentDiceNum.value; i++) {
@@ -23,17 +21,13 @@ class HomeCtrl extends GetxController {
 
         players[whoIsTurn.value].x.value = getOffsetOfHome(homeKey)[0];
         players[whoIsTurn.value].y.value = getOffsetOfHome(homeKey)[1];
-        // players[whoIsTurn.value].x.value =
-        //     getOffsetOfHome(keys[players[whoIsTurn.value].homeNo])[0];
-        // players[whoIsTurn.value].y.value =
-        //     getOffsetOfHome(keys[players[whoIsTurn.value].homeNo])[1];
       });
     }
 
     // TODO: check not over flow of 100
 
     int overLapperIndex = players.indexWhere((element) {
-      return element.name != players[whoIsTurn.value].name &&
+      return element.id != players[whoIsTurn.value].id &&
           // element.homeNo == destination;
           element.homeNo == players[whoIsTurn.value].homeNo;
     });
@@ -42,6 +36,19 @@ class HomeCtrl extends GetxController {
         ..homeNo = -1
         ..x.value = -1.0
         ..y.value = -1.0;
+
+      Get.snackbar(
+        "عرض تسلیت",
+        "${players[overLapperIndex].name} عزیز کشته شدنتان را تسلیت عرض میکنیم",
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        icon: const Icon(
+          Icons.warning_amber_rounded,
+          color: Colors.white,
+          textDirection: TextDirection.rtl,
+        ),
+      );
     }
 
     if (whoIsTurn.value + 1 < players.length) {

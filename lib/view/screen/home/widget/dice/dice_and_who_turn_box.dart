@@ -35,11 +35,11 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
                   ),
                 )
               : Padding(
-                padding: const EdgeInsets.all(12),
-                child: Dice(
+                  padding: const EdgeInsets.all(12),
+                  child: Dice(
                     homeCtrl.currentDiceNum.value,
                   ),
-              ),
+                ),
         ),
         GestureDetector(
           onTap: () async {
@@ -63,17 +63,36 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
                     players.length,
                     (index) {
                       return Container(
-                        height: 25,
-                        width: 25,
-                        margin: index != players.length - 1
-                            ? const EdgeInsets.only(right: 8)
-                            : null,
+                        margin: const EdgeInsets.symmetric(horizontal: 7),
                         decoration: BoxDecoration(
-                          color: players[index].color,
-                          border: index == whoIsTurn.value
-                              ? Border.all(color: Colors.white, width: 5)
-                              : null,
-                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: players[index].color,
+                            strokeAlign: BorderSide.strokeAlignOutside,
+                            width: 5,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: index == whoIsTurn.value
+                              ? [
+                                  BoxShadow(
+                                    blurRadius: 10,
+                                    spreadRadius: 10,
+                                    color: players[index].color,
+                                  ),
+                                ]
+                              : [],
+                        ),
+                        child: Container(
+                          height: halfOfAHomeWidth.value * 1.125,
+                          width: halfOfAHomeWidth.value * 1.125,
+                          decoration: BoxDecoration(
+                            color: players[index].color,
+                            border: Border.all(
+                              color: Colors.white,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
                         ),
                       );
                     },
