@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,40 +34,8 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
         if (!diceRolling) Dice(homeCtrl.currentDiceNum.value),
         GestureDetector(
           onTap: () async {
-            setState(() {
-              diceRolling = true;
-            });
-            // Timer(const Duration(seconds: 2), () {
-            //   setState(() {
-            //     diceRolling = false;
-            //   });
-            // });
-            await Future.delayed(const Duration(seconds: 2), () {
-              setState(() {
-                diceRolling = false;
-              });
-            });
-
-            homeCtrl.currentDiceNum.value = Random().nextInt(6) + 1;
-
-            for (int i = 0; i < homeCtrl.currentDiceNum.value; i++) {
-             await Future.delayed(const Duration(milliseconds: 300), () {
-                setState(() {
-                  players[whoIsTurn].homeNo++;
-                  players[whoIsTurn].x.value =
-                      getOffsetOfHome(keys[players[whoIsTurn].homeNo])[0];
-                  players[whoIsTurn].y.value =
-                      getOffsetOfHome(keys[players[whoIsTurn].homeNo])[1];
-                });
-              });
-            }
-
-            if (whoIsTurn + 1 < players.length) {
-              whoIsTurn++;
-            } else {
-              whoIsTurn = 0;
-            }
-            // homeCtrl.diceRoll(setState);
+            await showDiceRollingAnimation();
+            await homeCtrl.showDiceNumAndMovePlayerToken();
           },
           child: Column(
             children: [
@@ -107,5 +74,16 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
         ),
       ],
     );
+  }
+
+  Future<void> showDiceRollingAnimation() async {
+    setState(() {
+      diceRolling = true;
+    });
+    await Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        diceRolling = false;
+      });
+    });
   }
 }

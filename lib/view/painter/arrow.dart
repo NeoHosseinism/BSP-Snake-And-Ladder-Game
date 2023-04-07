@@ -22,10 +22,10 @@ class ArrowPainter extends CustomPainter {
     this.color = Colors.black,
     this.strokeWidth = 2.5,
   }) {
-    startX += halfOfAHomeWidth;
-    startY += halfOfAHomeWidth;
-    endX += halfOfAHomeWidth;
-    endY += halfOfAHomeWidth;
+    startX += halfOfAHomeWidth.value;
+    startY += halfOfAHomeWidth.value;
+    endX += halfOfAHomeWidth.value;
+    endY += halfOfAHomeWidth.value;
   }
 
   @override

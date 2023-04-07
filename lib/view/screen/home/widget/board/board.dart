@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../../../global.dart';
 
@@ -20,7 +19,6 @@ class Board extends StatelessWidget {
           ),
           itemBuilder: (_, index) {
             return GestureDetector(
-              // onTap: () => _getOffsetAndSize(_keys[index]),
               child: Container(
                 key: keys[index],
                 decoration: BoxDecoration(

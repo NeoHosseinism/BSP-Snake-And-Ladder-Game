@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +6,7 @@ import 'model/player/player.dart';
 List<RxBool> checkBoxs = List.generate(4, (index) => false.obs);
 List<Player> players = [];
 int whoIsTurn = 0;
-late double halfOfAHomeWidth;
+RxDouble halfOfAHomeWidth = (0.0).obs;
 
 const List<Color> playerTokenColors = [
   Colors.red,
@@ -18,7 +16,6 @@ const List<Color> playerTokenColors = [
 ];
 
 final List<GlobalKey> keys = List.generate(100, (index) => GlobalKey());
-RxList homesOffset = [].obs;
 
 List<double> getOffsetOfHome(GlobalKey key) {
   final RenderBox renderBox =
