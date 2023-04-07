@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +18,8 @@ const List<Color> playerTokenColors = [
 ];
 
 final List<GlobalKey> keys = List.generate(100, (index) => GlobalKey());
+RxList homesOffset = [].obs;
+
 List<double> getOffsetOfHome(GlobalKey key) {
   final RenderBox renderBox =
       key.currentContext!.findRenderObject() as RenderBox;

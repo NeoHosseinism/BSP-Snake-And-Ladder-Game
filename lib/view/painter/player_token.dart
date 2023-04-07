@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snake_and_ladder/global.dart';
 
 class PlayerTokenPainter extends CustomPainter {
   final double x, y;
@@ -38,12 +39,17 @@ class PlayerTokenPainter extends CustomPainter {
     paint.color = color;
 
     // center of the canvas is (x,y) => (width/2, height/2)
-    final Offset center = Offset(x, y);
+    final Offset center = Offset(x + halfOfAHomeWidth, y + halfOfAHomeWidth);
 
     // draw the circle with center having radius 15
     canvas.drawCircle(center, 15, paint);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(PlayerTokenPainter oldDelegate) {
+    return false;
+    // return (oldDelegate.x !=
+    //         getOffsetOfHome(keys[players[whoIsTurn].homeNo])[0] ||
+    //     oldDelegate.y != getOffsetOfHome(keys[players[whoIsTurn].homeNo])[1]);
+  }
 }

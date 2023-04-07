@@ -141,19 +141,21 @@ class SplashCtrl extends GetxController {
                           name: txtCtrls[i].text,
                           color: playerTokenColors[i],
                           homeNo: -1,
+                          x: (-1.0).obs,
+                          y: (-1.0).obs,
                         ),
                       );
                     }
                   }
 
-                  // ignore: avoid_function_literals_in_foreach_calls
-                  players.forEach((element) {
-                    debugPrint(">>>>>>>>>>>>>>>>>>>>>>>>");
-                    debugPrint("id : ${element.id}");
-                    debugPrint("name : ${element.name}");
-                    debugPrint("color : ${element.color.toString()}");
-                    debugPrint("homeNo : ${element.homeNo}");
-                  });
+                  // // ignore: avoid_function_literals_in_foreach_calls
+                  // players.forEach((element) {
+                  //   debugPrint(">>>>>>>>>>>>>>>>>>>>>>>>");
+                  //   debugPrint("id : ${element.id}");
+                  //   debugPrint("name : ${element.name}");
+                  //   debugPrint("color : ${element.color.toString()}");
+                  //   debugPrint("homeNo : ${element.homeNo}");
+                  // });
                   Get.back();
                 },
                 child: const Text('شروع'),

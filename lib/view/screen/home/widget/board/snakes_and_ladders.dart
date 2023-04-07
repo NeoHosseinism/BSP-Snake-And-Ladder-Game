@@ -1,24 +1,27 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../global.dart';
+import '../../../../../model/player/player.dart';
 import '../../../../painter/arrow.dart';
 import '../../../../painter/player_token.dart';
 
 class SnakesAndLadders extends StatelessWidget {
   const SnakesAndLadders({super.key});
 
-  void setAHomeSize() {
-    final size = keys[0].currentContext!.size;
-    if (size != null) {
-      halfOfAHomeWidth = size.width / 2;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.delayed(const Duration(seconds: 1), () {
+      future: Future.delayed(const Duration(milliseconds: 1), () {
         setAHomeSize();
+        // for (int i = 0; i < keys.length; i++) {
+        //   homesOffset.value.add([
+        //     getOffsetOfHome(keys[i])[0],
+        //     getOffsetOfHome(keys[i])[1],
+        //   ]);
+        //   print(getOffsetOfHome(keys[i])[0].toString());
+        // }
       }),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -101,22 +104,41 @@ class SnakesAndLadders extends StatelessWidget {
                     startY: getOffsetOfHome(keys[8])[1],
                     endX: getOffsetOfHome(keys[57])[0],
                     endY: getOffsetOfHome(keys[57])[1],
+                    // endY: homesOffset[57].dy,
                     arrowSize: halfOfAHomeWidth / 1.75,
                     color: Colors.green,
                   ),
                 ),
-                CustomPaint(
-                  painter: PlayerTokenPainter(
-                    x: getOffsetOfHome(keys[1])[0] + halfOfAHomeWidth,
-                    y: getOffsetOfHome(keys[1])[1] + halfOfAHomeWidth,
-                    color: Colors.deepOrange,
-                  ),
-                ),
+                // for (Player element in players
+                //     .where((element) => element.homeNo != -1)
+                //     .toList())
+                // CustomPaint(
+                //   painter: PlayerTokenPainter(
+                //     x: getOffsetOfHome(keys[element.homeNo])[0],
+                //     y: getOffsetOfHome(keys[element.homeNo])[1],
+                //     color: element.color,
+                //   ),
+                // ),
               ],
             ),
           );
         }
       },
     );
+  }
+
+  void setAHomeSize() {
+    final size = keys[0].currentContext!.size;
+    if (size != null) {
+      halfOfAHomeWidth = size.width / 2;
+    }
+
+    // for (int i = 0; i < 100; i++) {
+    //   homesOffset[i] = Offset(
+    //     getOffsetOfHome(keys[i])[0],
+    //     getOffsetOfHome(keys[i])[1],
+    //   );
+    //   print("${homesOffset[i].dx.toString()}, ${homesOffset[i].dx.toString()}");
+    // }
   }
 }
