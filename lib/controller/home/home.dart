@@ -7,6 +7,8 @@ import '../../global.dart';
 
 class HomeCtrl extends GetxController {
   RxInt currentDiceNum = 6.obs;
+  RxString _userAnswer = "".obs;
+
   Future<void> showDiceNumAndMovePlayerToken() async {
     currentDiceNum.value = Random().nextInt(6) + 1;
 
@@ -23,7 +25,9 @@ class HomeCtrl extends GetxController {
           players[whoIsTurn.value].x.value = getOffsetOfHome(homeKey)[0];
           players[whoIsTurn.value].y.value = getOffsetOfHome(homeKey)[1];
         });
+        //! DELETE this
       }
+      showQuestionDialog(questionsAndAnswers[Random().nextInt(3)]);
 
       if (players[whoIsTurn.value].homeNo == 99) {
         Get.snackbar(
@@ -61,10 +65,13 @@ class HomeCtrl extends GetxController {
       }
 
       if (_isStartOfLadder != -1) {
-        players[whoIsTurn.value]
-          ..homeNo = _indexOfHomesArrayForLadders
-          ..x.value = getOffsetOfHome(keys[_isStartOfLadder])[0]
-          ..y.value = getOffsetOfHome(keys[_isStartOfLadder])[1];
+        showQuestionDialog(questionsAndAnswers[Random().nextInt(3)]);
+        if (true) {
+          players[whoIsTurn.value]
+            ..homeNo = _indexOfHomesArrayForLadders
+            ..x.value = getOffsetOfHome(keys[_isStartOfLadder])[0]
+            ..y.value = getOffsetOfHome(keys[_isStartOfLadder])[1];
+        }
       }
 
       int overLapperIndex = players.indexWhere((element) {
@@ -166,5 +173,82 @@ class HomeCtrl extends GetxController {
       default:
         return -1;
     }
+  }
+
+  Future<void> showQuestionDialog(
+      Map<String, String> questionsAndAnswer) async {
+    await Get.dialog(
+      AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: const EdgeInsets.all(0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        content: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: const RadialGradient(
+              radius: 0.8,
+              colors: [
+                Color(0xFF772F1A),
+                Color.fromARGB(255, 62, 39, 35),
+              ],
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "نردبان ریاضی",
+                style: TextStyle(
+                  color: Colors.amber,
+                  fontSize: 14,
+                  fontFamily: "IRANSansXFaNum-Medium",
+                  decoration: TextDecoration.none,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "«${questionsAndAnswer["Question"].toString()}»",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(width: 20),
+                      const Text(
+                        ": حاصل عبارت مقابل را بیان کنید",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  Obx(() => Text(_userAnswer.value)),
+                ],
+              ),
+              const SizedBox(height: 15),
+              MaterialButton(
+                minWidth: double.infinity,
+                color: Colors.brown,
+                textColor: Colors.amber,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text('بازگشت'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

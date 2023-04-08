@@ -23,3 +23,18 @@ List<double> getOffsetOfHome(GlobalKey key) {
   final position = renderBox.localToGlobal(Offset.zero);
   return [position.dx, position.dy];
 }
+
+const List<Map<String, String>> questionsAndAnswers = [
+  {
+    "Question": "2 + 1",
+    "Answer": "سه",
+  },
+  {
+    "Question": "5 + 35",
+    "Answer": "چهل",
+  },
+  {
+    "Question": "2 + 3",
+    "Answer": "پنج",
+  }
+];
