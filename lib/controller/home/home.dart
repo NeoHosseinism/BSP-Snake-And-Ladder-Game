@@ -40,9 +40,7 @@ class HomeCtrl extends GetxController {
           players[whoIsTurn.value].x.value = getOffsetOfHome(homeKey)[0];
           players[whoIsTurn.value].y.value = getOffsetOfHome(homeKey)[1];
         });
-        //! DELETE this
       }
-      showQuestionDialog(setState);
 
       if (players[whoIsTurn.value].homeNo == 99) {
         Get.snackbar(
@@ -81,11 +79,12 @@ class HomeCtrl extends GetxController {
 
       if (_isStartOfLadder != -1) {
         showQuestionDialog(setState);
-        if (true) {
+        if (isAnsCorrect.value) {
           players[whoIsTurn.value]
             ..homeNo = _indexOfHomesArrayForLadders
             ..x.value = getOffsetOfHome(keys[_isStartOfLadder])[0]
             ..y.value = getOffsetOfHome(keys[_isStartOfLadder])[1];
+          isAnsCorrect.value = false;
         }
       }
 
@@ -100,18 +99,18 @@ class HomeCtrl extends GetxController {
           ..x.value = -1.0
           ..y.value = -1.0;
 
-        // Get.snackbar(
-        //   "عرض تسلیت",
-        //   "${players[overLapperIndex].name} عزیز کشته شدنتان را تسلیت عرض میکنیم",
-        //   duration: const Duration(seconds: 3),
-        //   backgroundColor: Colors.red,
-        //   colorText: Colors.white,
-        //   icon: const Icon(
-        //     Icons.warning_amber_rounded,
-        //     color: Colors.white,
-        //     textDirection: TextDirection.rtl,
-        //   ),
-        // );
+        Get.snackbar(
+          "عرض تسلیت",
+          "${players[overLapperIndex].name} عزیز کشته شدنتان را تسلیت عرض میکنیم",
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.white,
+            textDirection: TextDirection.rtl,
+          ),
+        );
       }
     }
 
@@ -190,10 +189,9 @@ class HomeCtrl extends GetxController {
     }
   }
 
-  Future<void> showQuestionDialog(setState) async {
+  void showQuestionDialog(setState) async {
     // startListening(setState);
     int rndNumber = Random().nextInt(3);
-
     await Get.dialog(
       QuestionBox(rndNumber),
     );
@@ -250,6 +248,7 @@ class _QuestionBoxState extends State<QuestionBox> {
     setState(() async {
       if (_lastWords ==
           questionsAndAnswers[widget.rndNumber]["Answer"].toString()) {
+        isAnsCorrect.value = true;
         Get.back();
       }
     });
@@ -300,11 +299,11 @@ class _QuestionBoxState extends State<QuestionBox> {
                       "« ${questionsAndAnswers[widget.rndNumber]["Question"].toString()} »",
                       style: const TextStyle(color: Colors.white),
                     ),
-                    const SizedBox(width: 20),
-                    const Text(
-                      ": حاصل عبارت مقابل را بیان کنید",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
+                    // const SizedBox(width: 20),
+                    // const Text(
+                    //   ": حاصل عبارت مقابل را بیان کنید",
+                    //   style: TextStyle(color: Colors.white, fontSize: 12),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 30),
@@ -321,33 +320,23 @@ class _QuestionBoxState extends State<QuestionBox> {
                 ),
                 // const SizedBox(height: 30),
                 if (_speechToText.isListening)
-                  Container(
-                    color: Colors.black45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          color: Colors.red,
-                          child: SizedBox(
-                            width: 50,
-                            child: Lottie.network(
-                                "https://assets9.lottiefiles.com/packages/lf20_vaWAER.json"),
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: 50,
+                        child: Lottie.asset("assets/gifs/lf20_vaWAER.json"),
+                      ),
+                      const Text(
+                        "در حال گوش دادن",
+                        style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 14,
+                          fontFamily: "IRANSansXFaNum-Medium",
+                          decoration: TextDecoration.none,
                         ),
-                        Container(
-                          color: Colors.blue,
-                          child: const Text(
-                            "در حال گوش دادن",
-                            style: TextStyle(
-                              color: Colors.amber,
-                              fontSize: 14,
-                              fontFamily: "IRANSansXFaNum-Medium",
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 const SizedBox(height: 15),
                 Text(

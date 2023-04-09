@@ -27,18 +27,19 @@ List<double> getOffsetOfHome(GlobalKey key) {
 
 const List<Map<String, String>> questionsAndAnswers = [
   {
-    "Question": "2 + 1",
-    "Answer": "3",
+    "Question": "جواب سلام",
+    "Answer": "سلام",
   },
   {
-    "Question": "5 + 35",
-    "Answer": "40",
+    "Question": "کشور شیران",
+    "Answer": "ایران",
   },
   {
-    "Question": "2 + 3",
-    "Answer": "5",
+    "Question": "یه صلوات بفرست",
+    "Answer": "اللهم صل علی محمد و آل محمد",
   }
 ];
 
 RxString lastSayedWords = ''.obs;
 RxBool isSpeeching = false.obs;
+RxBool isAnsCorrect = false.obs;
