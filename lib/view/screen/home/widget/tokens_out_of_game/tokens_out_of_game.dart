@@ -9,24 +9,18 @@ class TokensOutOfGame extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: avoid_unnecessary_containers
     return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          Obx(
-            () => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(players.length, (index) {
-                if (players[index].x.value == -1 &&
-                    players[index].y.value == -1) {
-                  return playerToken(index);
-                } else {
-                  return Container();
-                }
-              }),
-            ),
-          )
-        ],
+      alignment: Alignment.center,
+      child: Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(players.length, (index) {
+            if (players[index].x.value == -1 && players[index].y.value == -1) {
+              return playerToken(index);
+            } else {
+              return Container();
+            }
+          }),
+        ),
       ),
     );
   }

@@ -4,9 +4,9 @@ import 'package:snake_and_ladder/global.dart';
 import 'package:snake_and_ladder/model/player/player.dart';
 
 class SplashCtrl extends GetxController {
-  List<TextEditingController> txtCtrls = List.generate(
-      4, (index) => TextEditingController(text: "حسین"));
-      // ! checkboxs and text editing controllers
+  List<TextEditingController> txtCtrls =
+      List.generate(4, (index) => TextEditingController(text: "حسین"));
+  // ! checkboxs and text editing controllers
 
   RxBool showSplash = true.obs;
 
@@ -137,20 +137,20 @@ class SplashCtrl extends GetxController {
     //               if (checkBoxs
     //                       .indexWhere((element) => element.value == true) !=
     //                   -1) {
-                    for (int i = 0; i < txtCtrls.length; i++) {
-                      if (checkBoxs[i].value) {
-                        players.add(
-                          Player(
-                            id: i,
-                            name: txtCtrls[i].text,
-                            color: playerTokenColors[i],
-                            homeNo: -1,
-                            x: (-1.0).obs,
-                            y: (-1.0).obs,
-                          ),
-                        );
-                      }
-                    }
+    for (int i = 0; i < txtCtrls.length; i++) {
+      if (checkBoxs[i].value) {
+        players.add(
+          Player(
+            id: i,
+            name: txtCtrls[i].text,
+            color: playerTokenColors[i],
+            homeNo: -1,
+            x: (-1.0).obs,
+            y: (-1.0).obs,
+          ),
+        );
+      }
+    }
     //                 Get.back();
     //               } else {
     //                 Get.snackbar(

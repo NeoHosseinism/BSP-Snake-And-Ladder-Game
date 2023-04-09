@@ -2,14 +2,27 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../global.dart';
 
 class HomeCtrl extends GetxController {
   RxInt currentDiceNum = 6.obs;
-  RxString _userAnswer = "".obs;
+  RxString userAnswer = "".obs;
+  RxBool diceRolling = false.obs;
 
-  Future<void> showDiceNumAndMovePlayerToken() async {
+  Future<void> showDiceRollingAnimation() async {
+    // setState(() {
+    diceRolling.value = true;
+    // });
+    await Future.delayed(const Duration(milliseconds: 1700), () {
+      // setState(() {
+      diceRolling.value = false;
+      // });
+    });
+  }
+
+  Future<void> showDiceNumAndMovePlayerToken(StateSetter setState) async {
     currentDiceNum.value = Random().nextInt(6) + 1;
 
     if (players[whoIsTurn.value].homeNo + currentDiceNum.value < 100) {
@@ -27,7 +40,7 @@ class HomeCtrl extends GetxController {
         });
         //! DELETE this
       }
-      showQuestionDialog(questionsAndAnswers[Random().nextInt(3)]);
+      showQuestionDialog(questionsAndAnswers[Random().nextInt(3)], setState);
 
       if (players[whoIsTurn.value].homeNo == 99) {
         Get.snackbar(
@@ -65,7 +78,7 @@ class HomeCtrl extends GetxController {
       }
 
       if (_isStartOfLadder != -1) {
-        showQuestionDialog(questionsAndAnswers[Random().nextInt(3)]);
+        showQuestionDialog(questionsAndAnswers[Random().nextInt(3)], setState);
         if (true) {
           players[whoIsTurn.value]
             ..homeNo = _indexOfHomesArrayForLadders
@@ -176,7 +189,9 @@ class HomeCtrl extends GetxController {
   }
 
   Future<void> showQuestionDialog(
-      Map<String, String> questionsAndAnswer) async {
+      Map<String, String> questionsAndAnswer, setState) async {
+    // startListening(setState);
+
     await Get.dialog(
       AlertDialog(
         backgroundColor: Colors.transparent,
@@ -218,18 +233,56 @@ class HomeCtrl extends GetxController {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "«${questionsAndAnswer["Question"].toString()}»",
+                        "« ${questionsAndAnswer["Question"].toString()} »",
                         style: const TextStyle(color: Colors.white),
                       ),
                       const SizedBox(width: 20),
                       const Text(
                         ": حاصل عبارت مقابل را بیان کنید",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ],
                   ),
                   const SizedBox(height: 30),
-                  Obx(() => Text(_userAnswer.value)),
+                  // speechToText.isNotListening
+                  //     ? Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //         children: [
+                  //           SizedBox(
+                  //             height: 50,
+                  //             child: Lottie.network(
+                  //                 "https://assets9.lottiefiles.com/packages/lf20_vaWAER.json"),
+                  //           ),
+                  //           const Text(
+                  //             "در حال گوش دادن",
+                  //             // "عبارت بیان شده توسط شما",
+                  //             style: TextStyle(
+                  //               color: Colors.amber,
+                  //               fontSize: 14,
+                  //               fontFamily: "IRANSansXFaNum-Medium",
+                  //               decoration: TextDecoration.none,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       )
+                  //     : const Text(
+                  //         // "در حال گوش دادن",
+                  //         "عبارت بیان شده توسط شما",
+                  //         style: TextStyle(
+                  //           color: Colors.amber,
+                  //           fontSize: 14,
+                  //           fontFamily: "IRANSansXFaNum-Medium",
+                  //           decoration: TextDecoration.none,
+                  //         ),
+                  //       ),
+                  const SizedBox(height: 15),
+                  Obx(
+                    () => Text(
+                      lastSayedWords.value,
+                      style: const TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                 ],
               ),
               const SizedBox(height: 15),

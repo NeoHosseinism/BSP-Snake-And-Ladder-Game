@@ -18,27 +18,25 @@ class Board extends StatelessWidget {
             crossAxisCount: 10,
           ),
           itemBuilder: (_, index) {
-            return GestureDetector(
-              child: Container(
-                key: keys[index],
-                decoration: BoxDecoration(
-                  color: ((index ~/ 10) % 2 == 0) && (index % 2 == 0)
-                      ? Colors.brown
-                      : ((index ~/ 10) % 2 == 1) && (index % 2 == 1)
-                          ? Colors.brown
-                          : Colors.brown[800],
-                  borderRadius:
-                      (index == 0 || index == 9 || index == 90 || index == 99)
-                          ? setBorderRadius(index)
-                          : null,
-                ),
-                child: Center(
-                  child: Text(
-                    ((index ~/ 10) % 2 == 1)
-                        ? (((index ~/ 10) * 20) + 10 - index).toString()
-                        : (index + 1).toString(),
-                    style: const TextStyle(color: Colors.amber),
-                  ),
+            return Container(
+              key: keys[index],
+              decoration: BoxDecoration(
+                color: ((index ~/ 10) % 2 == 0) && (index % 2 == 0)
+                    ? Colors.brown
+                    : ((index ~/ 10) % 2 == 1) && (index % 2 == 1)
+                        ? Colors.brown
+                        : Colors.brown[800],
+                borderRadius:
+                    (index == 0 || index == 9 || index == 90 || index == 99)
+                        ? setBorderRadius(index)
+                        : null,
+              ),
+              child: Center(
+                child: Text(
+                  ((index ~/ 10) % 2 == 1)
+                      ? (((index ~/ 10) * 20) + 10 - index).toString()
+                      : (index + 1).toString(),
+                  style: const TextStyle(color: Colors.amber),
                 ),
               ),
             );

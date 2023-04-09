@@ -15,6 +15,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   lottie: ^2.3.1
   get: ^4.6.5
+  speech_to_text: ^6.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snake_and_ladder/global.dart';
+import 'package:snake_and_ladder/view/screen/home/widget/recognized_words/recognized_words.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import 'widget/board/board.dart';
 import 'widget/board/snakes_and_ladders.dart';
@@ -15,6 +18,53 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  String _lastWords = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    setState(() {});
+  }
+
+  void _startListening() async {
+    List<LocaleName> locales = await _speechToText.locales();
+
+    var selectedLocale = locales[76];
+
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      localeId: selectedLocale.localeId,
+    );
+
+    setState(() {});
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {});
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      _lastWords = result.recognizedWords;
+    });
+
+    setState(() async {
+      if (_lastWords == "تاس بریز") {
+        await homeCtrl.showDiceRollingAnimation();
+        await homeCtrl.showDiceNumAndMovePlayerToken(setState);
+        print("pass checked >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,13 +84,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                SizedBox(height: 50),
-                DiceAndWhoTurnBox(),
-                SizedBox(height: 30),
-                Board(),
-                SizedBox(height: 30),
-                TokensOutOfGame(),
+              children: [
+                const SizedBox(height: 90),
+                const DiceAndWhoTurnBox(),
+                const Board(),
+                const SizedBox(height: 20),
+                const SizedBox(
+                  height: 60,
+                  child: Center(child: TokensOutOfGame()),
+                ),
+                const Spacer(),
+                RecognizedWords(_lastWords),
+                const Spacer(),
+                const Spacer(),
+                const Spacer(),
               ],
             ),
             const SnakesAndLadders(),
@@ -100,6 +157,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               ),
             ),
           ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 20, left: 6),
+          child: FloatingActionButton(
+            onPressed:
+                // If not yet listening for speech start, otherwise stop
+                _speechToText.isNotListening ? _startListening : _stopListening,
+            tooltip: 'Listen',
+            backgroundColor: Colors.amber[800],
+            child:
+                Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+          ),
         ),
       ),
     );

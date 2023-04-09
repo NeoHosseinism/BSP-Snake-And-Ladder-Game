@@ -9,7 +9,6 @@ import '../../../../../global.dart';
 import 'dice.dart';
 
 final HomeCtrl homeCtrl = Get.put(HomeCtrl());
-bool diceRolling = false;
 
 class DiceAndWhoTurnBox extends StatefulWidget {
   const DiceAndWhoTurnBox({super.key});
@@ -24,27 +23,29 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        SizedBox(
-          height: 100,
-          width: 100,
-          child: (diceRolling)
-              ? Center(
-                  child: Lottie.asset(
-                    "assets/gifs/131706-dice-6.json",
-                    height: 100,
+        Obx(
+          () => SizedBox(
+            height: 100,
+            width: 100,
+            child: (homeCtrl.diceRolling.value)
+                ? Center(
+                    child: Lottie.asset(
+                      "assets/gifs/131706-dice-6.json",
+                      height: 100,
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Dice(
+                      homeCtrl.currentDiceNum.value,
+                    ),
                   ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Dice(
-                    homeCtrl.currentDiceNum.value,
-                  ),
-                ),
+          ),
         ),
         GestureDetector(
           onTap: () async {
-            await showDiceRollingAnimation();
-            await homeCtrl.showDiceNumAndMovePlayerToken();
+            await homeCtrl.showDiceRollingAnimation();
+            await homeCtrl.showDiceNumAndMovePlayerToken(setState);
           },
           child: Obx(
             () => Column(
@@ -104,16 +105,5 @@ class _DiceAndWhoTurnBoxState extends State<DiceAndWhoTurnBox> {
         ),
       ],
     );
-  }
-
-  Future<void> showDiceRollingAnimation() async {
-    setState(() {
-      diceRolling = true;
-    });
-    await Future.delayed(const Duration(milliseconds: 1700), () {
-      setState(() {
-        diceRolling = false;
-      });
-    });
   }
 }

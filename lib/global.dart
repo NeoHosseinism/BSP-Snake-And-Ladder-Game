@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import 'model/player/player.dart';
 
@@ -27,14 +28,17 @@ List<double> getOffsetOfHome(GlobalKey key) {
 const List<Map<String, String>> questionsAndAnswers = [
   {
     "Question": "2 + 1",
-    "Answer": "سه",
+    "Answer": "3",
   },
   {
     "Question": "5 + 35",
-    "Answer": "چهل",
+    "Answer": "40",
   },
   {
     "Question": "2 + 3",
-    "Answer": "پنج",
+    "Answer": "5",
   }
 ];
+
+RxString lastSayedWords = ''.obs;
+RxBool isSpeeching = false.obs;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'view/screen/home/home.dart';
+import 'view/screen/speech/speech.dart';
 import 'view/screen/splash/splash.dart';
 
 void main() => runApp(const MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: "/splash", page: () => const Splash()),
         GetPage(name: "/home", page: () => const Home()),
+        GetPage(name: "/speech", page: () => const Speech()),
       ],
     );
   }
