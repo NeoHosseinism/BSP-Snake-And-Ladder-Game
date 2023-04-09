@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../global.dart';
 
@@ -40,7 +42,7 @@ class HomeCtrl extends GetxController {
         });
         //! DELETE this
       }
-      showQuestionDialog(questionsAndAnswers[Random().nextInt(3)], setState);
+      showQuestionDialog(setState);
 
       if (players[whoIsTurn.value].homeNo == 99) {
         Get.snackbar(
@@ -78,7 +80,7 @@ class HomeCtrl extends GetxController {
       }
 
       if (_isStartOfLadder != -1) {
-        showQuestionDialog(questionsAndAnswers[Random().nextInt(3)], setState);
+        showQuestionDialog(setState);
         if (true) {
           players[whoIsTurn.value]
             ..homeNo = _indexOfHomesArrayForLadders
@@ -188,118 +190,187 @@ class HomeCtrl extends GetxController {
     }
   }
 
-  Future<void> showQuestionDialog(
-      Map<String, String> questionsAndAnswer, setState) async {
+  Future<void> showQuestionDialog(setState) async {
     // startListening(setState);
+    int rndNumber = Random().nextInt(3);
 
     await Get.dialog(
-      AlertDialog(
-        backgroundColor: Colors.transparent,
-        contentPadding: const EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        content: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: const RadialGradient(
-              radius: 0.8,
-              colors: [
-                Color(0xFF772F1A),
-                Color.fromARGB(255, 62, 39, 35),
-              ],
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                "نردبان ریاضی",
-                style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 14,
-                  fontFamily: "IRANSansXFaNum-Medium",
-                  decoration: TextDecoration.none,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "« ${questionsAndAnswer["Question"].toString()} »",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      const SizedBox(width: 20),
-                      const Text(
-                        ": حاصل عبارت مقابل را بیان کنید",
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  // speechToText.isNotListening
-                  //     ? Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //         children: [
-                  //           SizedBox(
-                  //             height: 50,
-                  //             child: Lottie.network(
-                  //                 "https://assets9.lottiefiles.com/packages/lf20_vaWAER.json"),
-                  //           ),
-                  //           const Text(
-                  //             "در حال گوش دادن",
-                  //             // "عبارت بیان شده توسط شما",
-                  //             style: TextStyle(
-                  //               color: Colors.amber,
-                  //               fontSize: 14,
-                  //               fontFamily: "IRANSansXFaNum-Medium",
-                  //               decoration: TextDecoration.none,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       )
-                  //     : const Text(
-                  //         // "در حال گوش دادن",
-                  //         "عبارت بیان شده توسط شما",
-                  //         style: TextStyle(
-                  //           color: Colors.amber,
-                  //           fontSize: 14,
-                  //           fontFamily: "IRANSansXFaNum-Medium",
-                  //           decoration: TextDecoration.none,
-                  //         ),
-                  //       ),
-                  const SizedBox(height: 15),
-                  Obx(
-                    () => Text(
-                      lastSayedWords.value,
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                ],
-              ),
-              const SizedBox(height: 15),
-              MaterialButton(
-                minWidth: double.infinity,
-                color: Colors.brown,
-                textColor: Colors.amber,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text('بازگشت'),
-              ),
+      QuestionBox(rndNumber),
+    );
+  }
+}
+
+class QuestionBox extends StatefulWidget {
+  int rndNumber;
+  QuestionBox(this.rndNumber, {super.key});
+
+  @override
+  State<QuestionBox> createState() => _QuestionBoxState();
+}
+
+class _QuestionBoxState extends State<QuestionBox> {
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  String _lastWords = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    setState(() {});
+  }
+
+  void _startListening() async {
+    List<LocaleName> locales = await _speechToText.locales();
+
+    var selectedLocale = locales[76];
+
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      localeId: selectedLocale.localeId,
+    );
+
+    setState(() {});
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {});
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      _lastWords = result.recognizedWords;
+    });
+
+    setState(() async {
+      if (_lastWords ==
+          questionsAndAnswers[widget.rndNumber]["Answer"].toString()) {
+        Get.back();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      contentPadding: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      content: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: const RadialGradient(
+            radius: 0.8,
+            colors: [
+              Color(0xFF772F1A),
+              Color.fromARGB(255, 62, 39, 35),
             ],
           ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "نردبان ریاضی",
+              style: TextStyle(
+                color: Colors.amber,
+                fontSize: 14,
+                fontFamily: "IRANSansXFaNum-Medium",
+                decoration: TextDecoration.none,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "« ${questionsAndAnswers[widget.rndNumber]["Question"].toString()} »",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(width: 20),
+                    const Text(
+                      ": حاصل عبارت مقابل را بیان کنید",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                FloatingActionButton(
+                  onPressed:
+                      // If not yet listening for speech start, otherwise stop
+                      _speechToText.isNotListening
+                          ? _startListening
+                          : _stopListening,
+                  tooltip: 'Listen',
+                  backgroundColor: Colors.amber[800],
+                  child: Icon(
+                      _speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+                ),
+                // const SizedBox(height: 30),
+                if (_speechToText.isListening)
+                  Container(
+                    color: Colors.black45,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          color: Colors.red,
+                          child: SizedBox(
+                            width: 50,
+                            child: Lottie.network(
+                                "https://assets9.lottiefiles.com/packages/lf20_vaWAER.json"),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.blue,
+                          child: const Text(
+                            "در حال گوش دادن",
+                            style: TextStyle(
+                              color: Colors.amber,
+                              fontSize: 14,
+                              fontFamily: "IRANSansXFaNum-Medium",
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 15),
+                Text(
+                  _lastWords,
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(fontSize: 14, color: Colors.white),
+                )
+              ],
+            ),
+            const SizedBox(height: 15),
+            MaterialButton(
+              minWidth: double.infinity,
+              color: Colors.brown,
+              textColor: Colors.amber,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text('بازگشت'),
+            ),
+          ],
         ),
       ),
     );

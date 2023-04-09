@@ -60,7 +60,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       if (_lastWords == "تاس بریز") {
         await homeCtrl.showDiceRollingAnimation();
         await homeCtrl.showDiceNumAndMovePlayerToken(setState);
-        print("pass checked >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       }
     });
   }

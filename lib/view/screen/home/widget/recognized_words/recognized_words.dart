@@ -6,11 +6,15 @@ class RecognizedWords extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      words,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 16,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Text(
+        words,
+        textAlign: TextAlign.right,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
       ),
     );
   }
