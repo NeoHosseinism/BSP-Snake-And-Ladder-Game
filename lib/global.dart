@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 
 import 'model/player/player.dart';
 
-List<RxBool> checkBoxs = List.generate(4, (index) => true.obs);
+List<RxBool> checkBoxs = List.generate(4, (index) => false.obs);
 List<Player> players = [];
 RxInt whoIsTurn = 0.obs;
 RxDouble halfOfAHomeWidth = (0.0).obs;
