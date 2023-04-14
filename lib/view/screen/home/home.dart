@@ -57,7 +57,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     });
 
     setState(() async {
-      if (_lastWords == "تاس بریز") {
+      if (_lastWords == "تاس") {
         await homeCtrl.showDiceRollingAnimation();
         await homeCtrl.showDiceNumAndMovePlayerToken(setState);
       }

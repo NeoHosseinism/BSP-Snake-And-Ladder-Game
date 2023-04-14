@@ -26,16 +26,16 @@ List<double> getOffsetOfHome(GlobalKey key) {
 
 const List<Map<String, String>> questionsAndAnswers = [
   {
-    "Question": "جواب سلام",
+    "Question": "جواب سلام چیست ؟",
     "Answer": "سلام",
   },
   {
-    "Question": "کشور شیران",
+    "Question": "بگو ایران",
     "Answer": "ایران",
   },
   {
-    "Question": "یه صلوات بفرست",
-    "Answer": "اللهم صل علی محمد و آل محمد",
+    "Question": "بگو دمت گرم",
+    "Answer": "دمت گرم",
   }
 ];
 
