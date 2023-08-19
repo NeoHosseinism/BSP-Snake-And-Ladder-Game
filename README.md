@@ -6,7 +6,9 @@ Welcome to the "Snake and Ladder with Speech Recognition" game, a unique twist o
 
 1. **Home Screen and Player Setup**
    
-   ![Home Screen](assets/screenshots/1.png)
+<p align="center">
+  <img src="assets/screenshots/1.png" alt="Home Screen">
+</p>
    
    The home screen allows players to select their preferred color and set their names for the game beads. 
 
