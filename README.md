@@ -14,19 +14,25 @@ Welcome to the "Snake and Ladder with Speech Recognition" game, a unique twist o
 
 2. **Gameplay with Snakes, Ladders, and Speech Recognition**
    
-   ![Gameplay](assets/screenshots/2.png)
-   
+<p align="center">
+  <img src="assets/screenshots/2.png" alt="Gameplay" height="500">
+</p>
+
    This screenshot showcases the main gameplay screen. You can see the snakes and ladders on the board, with players' dice at the bottom. The floating action button (FAB) in the bottom-left corner initiates dice rolling by recognizing the spoken word "تاس" (meaning "dice" in Persian). The game responds to this voice command and automatically moves the player's bead accordingly.
 
 3. **Ladder Challenge with Speech-Enabled Question**
    
-   ![Ladder Challenge](assets/screenshots/3.png)
+<p align="center">
+  <img src="assets/screenshots/3.png" alt="Ladder Challenge" height="500">
+</p>
    
    When a player lands on the starting point of a ladder, an interactive challenge begins. To climb the ladder, the player must correctly answer a question. The game employs the device's microphone for speech recognition, adding an engaging and immersive aspect to the gameplay.
 
-4. **Victory Celebration**
+5. **Victory Celebration**
    
-   ![Victory Celebration](assets/screenshots/4.png)
+<p align="center">
+  <img src="assets/screenshots/4.png" alt="Victory Celebration" height="500">
+</p>
    
    This screenshot captures the excitement of a player reaching the final house, signifying victory. It's the ultimate achievement in the game.
 
