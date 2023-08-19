@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../global.dart';
+import '../../../../../utils.dart';
 import '../../../../painter/arrow.dart';
 
 class SnakesAndLadders extends StatelessWidget {

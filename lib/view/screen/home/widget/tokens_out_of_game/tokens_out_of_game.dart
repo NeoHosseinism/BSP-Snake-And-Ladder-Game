@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snake_and_ladder/global.dart';
+import 'package:snake_and_ladder/utils.dart';
 
 class TokensOutOfGame extends StatelessWidget {
   const TokensOutOfGame({super.key});

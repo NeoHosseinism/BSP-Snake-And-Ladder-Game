@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:snake_and_ladder/global.dart';
+import 'package:snake_and_ladder/utils.dart';
 import 'package:snake_and_ladder/view/screen/home/widget/recognized_words/recognized_words.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';

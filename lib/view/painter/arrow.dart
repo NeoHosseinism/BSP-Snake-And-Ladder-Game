@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../global.dart';
+import '../../utils.dart';
 
 class ArrowPainter extends CustomPainter {
   final Color color;

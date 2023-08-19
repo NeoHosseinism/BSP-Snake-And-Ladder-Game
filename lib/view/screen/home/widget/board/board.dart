@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../global.dart';
+import '../../../../../utils.dart';
 
 class Board extends StatelessWidget {
   const Board({super.key});

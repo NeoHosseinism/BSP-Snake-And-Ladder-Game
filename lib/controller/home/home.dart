@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-import '../../global.dart';
+import '../../utils.dart';
 
 class HomeCtrl extends GetxController {
   RxInt currentDiceNum = 6.obs;

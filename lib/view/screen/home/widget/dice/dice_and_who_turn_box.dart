@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:snake_and_ladder/controller/home/home.dart';
 
-import '../../../../../global.dart';
+import '../../../../../utils.dart';
 import 'dice.dart';
 
 final HomeCtrl homeCtrl = Get.put(HomeCtrl());
